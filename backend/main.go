@@ -15,7 +15,7 @@ func main() {
 	utils.LoadEnv()
 	port := os.Getenv("PORT")
 	config.ConnectDatabase(os.Getenv("DATABASE_URL"))
-	allowedOrigins := os.Getenv("ALLOWED_ORIGINS")
+	allowedOrigins := os.Getenv("FRONTEND_DOMAIN")
 	gin.SetMode(gin.ReleaseMode)
 	router := gin.Default()
 	fmt.Println("Server is running on port " + port)

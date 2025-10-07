@@ -63,14 +63,10 @@ func HandleGoogleCallback(c *gin.Context) {
 		return
 	}
 
-	stage := os.Getenv("STAGE")
+	frontendDomain := os.Getenv("FRONTEND_DOMAIN")
 
 	if !IsEmailAllowed(userInfo.Email) {
-		if stage == "production" {
-			c.Redirect(http.StatusTemporaryRedirect, "http://products.intellicar.in/unauthorized")
-		} else {
-			c.Redirect(http.StatusTemporaryRedirect, "http://localhost:5173/unauthorized")
-		}
+		c.Redirect(http.StatusTemporaryRedirect, frontendDomain+"/unauthorized")
 		return
 	}
 	role, err := handler.CreateProfile(userInfo.Email)
@@ -92,11 +88,7 @@ func HandleGoogleCallback(c *gin.Context) {
 	}
 
 	SetAuthCookies(c, accessToken, refreshToken)
-	if stage == "production" {
-		c.Redirect(http.StatusTemporaryRedirect, "http://products.intellicar.in/home")
-	} else {
-		c.Redirect(http.StatusTemporaryRedirect, "http://localhost:5173/home")
-	}
+	c.Redirect(http.StatusTemporaryRedirect, frontendDomain+"/home")
 }
 
 func FetchGoogleUserInfo(token *oauth2.Token) (*UserInfo, error) {
