@@ -15,12 +15,13 @@ func main() {
 	utils.LoadEnv()
 	port := os.Getenv("PORT")
 	config.ConnectDatabase(os.Getenv("DATABASE_URL"))
+	allowedOrigins := os.Getenv("ALLOWED_ORIGINS")
 	gin.SetMode(gin.ReleaseMode)
 	router := gin.Default()
 	fmt.Println("Server is running on port " + port)
 
 	router.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://localhost:5173"},
+		AllowOrigins:     []string{allowedOrigins},
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Accept", "Authorization"},
 		ExposeHeaders:    []string{"Content-Length"},

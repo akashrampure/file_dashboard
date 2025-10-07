@@ -62,9 +62,15 @@ func HandleGoogleCallback(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch user info"})
 		return
 	}
+
+	stage := os.Getenv("STAGE")
+
 	if !IsEmailAllowed(userInfo.Email) {
-		c.Redirect(http.StatusTemporaryRedirect, "http://localhost:5173/unauthorized")
-		// c.Redirect(http.StatusTemporaryRedirect, "http://products.intellicar.in/unauthorized")
+		if stage == "production" {
+			c.Redirect(http.StatusTemporaryRedirect, "http://products.intellicar.in/unauthorized")
+		} else {
+			c.Redirect(http.StatusTemporaryRedirect, "http://localhost:5173/unauthorized")
+		}
 		return
 	}
 	role, err := handler.CreateProfile(userInfo.Email)
@@ -86,8 +92,11 @@ func HandleGoogleCallback(c *gin.Context) {
 	}
 
 	SetAuthCookies(c, accessToken, refreshToken)
-	c.Redirect(http.StatusTemporaryRedirect, "http://localhost:5173/home")
-	// c.Redirect(http.StatusTemporaryRedirect, "http://products.intellicar.in/home")
+	if stage == "production" {
+		c.Redirect(http.StatusTemporaryRedirect, "http://products.intellicar.in/home")
+	} else {
+		c.Redirect(http.StatusTemporaryRedirect, "http://localhost:5173/home")
+	}
 }
 
 func FetchGoogleUserInfo(token *oauth2.Token) (*UserInfo, error) {
