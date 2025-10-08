@@ -4,8 +4,8 @@ import Cookies from 'universal-cookie';
 import { jwtDecode, JwtPayload } from 'jwt-decode';
 import { persistor } from '../store/store';
 import axios from 'axios';
-// const API_BASE_URL = "https://products.intellicar.in/api/v1/products";
-const API_BASE_URL = "http://localhost:8080";
+const API_BASE_URL = import.meta.env.VITE_BACKEND_URL
+const STAGE = import.meta.env.VITE_STAGE
 
 const cookies = new Cookies();
 
@@ -42,13 +42,15 @@ export const authApi = {
 
   async signOut(): Promise<void> {
     try {
-      // for production
-      // cookies.remove('access_token', { domain: 'products.intellicar.in', path: '/' });
-      // cookies.remove('refresh_token', { domain: 'products.intellicar.in', path: '/' });
+      var domain = "localhost"
+      var path ="/"
 
-      // for development
-      cookies.remove('access_token', { domain: 'localhost', path: '/' });
-      cookies.remove('refresh_token', { domain: 'localhost', path: '/' });
+      if(STAGE=="production"){
+          domain="products.intellicar.in"
+      }
+
+      cookies.remove('access_token', { domain: domain, path: path });
+      cookies.remove('refresh_token', { domain: domain, path: path });
 
       try {
         await persistor.purge();

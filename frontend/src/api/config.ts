@@ -3,8 +3,7 @@ import axios from 'axios';
 export type SearchResult = string;
 export type DetailResult = Record<string, any>;
 
-// const API_BASE_URL = "https://products.intellicar.in/api/v1/products";
-const API_BASE_URL = "http://localhost:8080";
+const API_BASE_URL = import.meta.env.VITE_BACKEND_URL
 
 export const api = axios.create({
   baseURL: API_BASE_URL + '/api',
