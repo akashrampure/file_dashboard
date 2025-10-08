@@ -8,8 +8,8 @@ import (
 
 func ProfileRoutes(router *gin.Engine) {
 
-	api := router.Group("/api")
-	// api := router.Group("/api/v1/products/api")
+	// api := router.Group("/api")
+	api := router.Group("/api/v1/products/api")
 
 	{
 		api.GET("/users", handler.GetAllUsers)

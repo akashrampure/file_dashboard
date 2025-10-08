@@ -8,8 +8,8 @@ import (
 
 func PackageRoutes(router *gin.Engine) {
 
-	api := router.Group("/api")
-	// api := router.Group("/api/v1/products/api")
+	// api := router.Group("/api")
+	api := router.Group("/api/v1/products/api")
 
 	api.POST("/package", handler.CreatePackage)
 	api.GET("/package/:fpcode", handler.GetPackage)
